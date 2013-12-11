@@ -39,11 +39,33 @@ var app = {
     receivedEvent: function(id) {
         var parentElement = document.getElementById(id);
         var listeningElement = parentElement.querySelector('.listening');
-        var receivedElement = parentElement.querySelector('.received');
+        var receivedElement  = parentElement.querySelector('.received');
+        var confirmElement   = parentElement.querySelector('.confirm');
 
         listeningElement.setAttribute('style', 'display:none;');
         receivedElement.setAttribute('style', 'display:block;');
 
+        navigator.splashscreen.show();
+        setTimeout(function() {
+            navigator.splashscreen.hide();
+            confirmElement.setAttribute('style', 'display:block;');
+        }, 3000);
+
         console.log('Received Event: ' + id);
+    },
+    // process the confirmation dialog result
+    onConfirm : function(button) {
+        alert('You selected button ' + button);
+    }
+
+    // Show a custom confirmation dialog
+    showConfirm: function(){
+         var self = this;
+        navigator.notification.confirm(
+            'You are the winner!',  // message
+            self.onConfirm,              // callback to invoke with index of button pressed
+            'Game Over',            // title
+            'Restart,Exit'          // buttonLabels
+        );
     }
 };
